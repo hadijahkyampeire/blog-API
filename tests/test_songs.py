@@ -10,7 +10,7 @@ class blogsTestCase(unittest.TestCase):
     def setUp(self):
         # binds the app to the current context
         self.client = app.test_client()
-        self.blog = {'title': 'queen of my heart', 'blog':'westlife boys'}
+        self.blog = {'title': 'my journey', 'blog':'To Andela'}
         with app.app_context():
             # create all database tables
             db.create_all()
@@ -22,7 +22,7 @@ class blogsTestCase(unittest.TestCase):
             'email': email,
             'password': password
         }
-        return self.client.post('/auth/register', data=user_data)
+        return self.client.post('/api/v1/auth/register', data=user_data)
 
     def login_user(self, email="user@test.com", password="test1234"):
         """This helper method helps log in a test user."""
@@ -30,7 +30,7 @@ class blogsTestCase(unittest.TestCase):
             'email': email,
             'password': password
         }
-        return self.client.post('/auth/login', data=user_data)
+        return self.client.post('/api/v1/auth/login', data=user_data)
 
     def test_blogs_creation(self):
         """Test the API can create blogs"""
@@ -38,7 +38,7 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.post('/blog/blogs',
+        result = self.client.post('/api/v1/blog/blogs',
             headers=dict(Authorization="Bearer " + access_token), data=self.blog)
         self.assertEqual(result.status_code, 201)
         self.assertIn('blog successfully created', str(result.data))
@@ -49,8 +49,8 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.post('/blog/blogs', headers=dict(Authorization="Bearer " + access_token),data=self.blog)
-        result = self.client.get('/blog/blogs', headers=dict(Authorization="Bearer " + access_token),)
+        result = self.client.post('/api/v1/blog/blogs', headers=dict(Authorization="Bearer " + access_token),data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs', headers=dict(Authorization="Bearer " + access_token),)
         self.assertEqual(result.status_code, 200)
 
     def test_blogs_can_be_got_by_id(self):
@@ -59,8 +59,8 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.post('/blog/blogs', headers=dict(Authorization="Bearer " + access_token),data=self.blog)
-        result = self.client.get('/blog/blogs/1', headers=dict(Authorization="Bearer " + access_token),)
+        result = self.client.post('/api/v1/blog/blogs', headers=dict(Authorization="Bearer " + access_token),data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs/1', headers=dict(Authorization="Bearer " + access_token),)
         self.assertEqual(result.status_code, 200)
 
     def test_blog_can_be_edited(self):
@@ -69,9 +69,9 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result1 = self.client.post('/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=self.blog)
-        new_data = {'title':'kiwani', 'blog':'bobi'}
-        result2 = self.client.post('/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=new_data)
+        result1 = self.client.post('/api/v1/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=self.blog)
+        new_data = {'title':'dreams', 'blog':'to be a millionaire'}
+        result2 = self.client.post('/api/v1/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=new_data)
         self.assertEqual(result2.status_code, 201)
 
     def test_blog_can_be_deleted(self):
@@ -80,9 +80,9 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.post('/blog/blogs',
+        result = self.client.post('/api/v1/blog/blogs',
             headers=dict(Authorization="Bearer " + access_token), data=self.blog)
-        result = self.client.delete('/blog/blogs/1', headers=dict(Authorization="Bearer " + access_token),)
+        result = self.client.delete('/api/v1/blog/blogs/1', headers=dict(Authorization="Bearer " + access_token),)
         self.assertEqual(result.status_code, 200)
 
     def test_blog_to_be_deleted_is_not_found(self):
@@ -91,7 +91,7 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.delete('blog/blogs/1', 
+        result = self.client.delete('/api/v1/blog/blogs/1', 
             headers=dict(Authorization="Bearer " + access_token))
         self.assertEqual(result.status_code, 404)
 
@@ -101,8 +101,8 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        new_data = {'title':'kiwani', 'blog':'bobi'}
-        result = self.client.put('/blog/blogs/1',
+        new_data = {'title':'dreams', 'blog':'to be a millionaire'}
+        result = self.client.put('/api/v1/blog/blogs/1',
             headers=dict(Authorization="Bearer " + access_token), data=new_data)
         self.assertEqual(result.status_code, 404)
 
@@ -112,38 +112,38 @@ class blogsTestCase(unittest.TestCase):
         result = self.login_user()
         # obtain the access token
         access_token = json.loads(result.data.decode())['access_token']
-        result = self.client.get('/blog/blogs/1', 
+        result = self.client.get('/api/v1/blog/blogs/1', 
             headers=dict(Authorization="Bearer " + access_token))
         self.assertEqual(result.status_code, 404)
     
     def test_user_cannot_add_blogs_with_no_token(self):
         """Test APi handles error when posting with no token"""
-        result = self.client.post('/blog/blogs', data=self.blog)
+        result = self.client.post('/api/v1/blog/blogs', data=self.blog)
         self.assertEqual(result.status_code, 401)
 
     def test_user_cannot_get_blogs_with_no_token(self):
         """Test APi handles error when getting blogs with no token"""
-        add = self.client.post('/blog/blogs', data=self.blog)
-        result = self.client.get('/blog/blogs')
+        add = self.client.post('/api/v1/blog/blogs', data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs')
         self.assertEqual(result.status_code, 401)
 
     def test_user_cannot_edit_blogs_with_no_token(self):
         """Test APi handles error when puting with no token"""
-        res = self.client.post('/blog/blogs', data=self.blog)
+        res = self.client.post('/api/v1/blog/blogs', data=self.blog)
         new_data={'title':'one step','blog':'beyonce'}
-        result = self.client.put('/blog/blogs/1', data=new_data)
+        result = self.client.put('/api/v1/blog/blogs/1', data=new_data)
         self.assertEqual(result.status_code, 401)
 
     def test_user_cannot_get_blog_by_id_with_no_token(self):
         """Test APi handles error when getting a blog with no token"""
-        result1 = self.client.post('/blog/blogs', data=self.blog)
-        result = self.client.get('/blog/blogs/1', data=self.blog)
+        result1 = self.client.post('/api/v1/blog/blogs', data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs/1', data=self.blog)
         self.assertEqual(result.status_code, 401)
 
     def test_user_cannot_delete_blogs_with_no_token(self):
         """Test APi handles error when delete with no token"""
-        result1 = self.client.post('/blog/blogs', data=self.blog)
-        result = self.client.delete('/blog/blogs/1')
+        result1 = self.client.post('/api/v1/blog/blogs', data=self.blog)
+        result = self.client.delete('/api/v1/blog/blogs/1')
         self.assertEqual(result.status_code, 401)
     def tearDown(self):
         with app.app_context():

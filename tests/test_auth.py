@@ -19,12 +19,12 @@ class AuthTestCase(unittest.TestCase):
             db.create_all()
     def test_successful_registration(self):
         """Test when user registers with right credentials"""
-        res = self.client.post('auth/register', data=self.user)
+        res = self.client.post('/api/v1/auth/register', data=self.user)
         self.assertEqual(res.status_code, 201)
 
     def test_already_registered_user(self):
         """Test that a user cannot be registered twice."""
-        res = self.client.post('auth/register',data=self.user)
+        res = self.client.post('/api/v1/auth/register',data=self.user)
         second_res = self.client.post('auth/register',
         data=self.user)
         self.assertEqual(second_res.status_code, 409)
@@ -35,8 +35,8 @@ class AuthTestCase(unittest.TestCase):
     
     def test_user_login(self):
         """Test registered user can login."""
-        res = self.client.post('/auth/register',data=self.user)
-        login_res = self.client.post('/auth/login',
+        res = self.client.post('/api/v1/auth/register',data=self.user)
+        login_res = self.client.post('/api/v1/auth/login',
         data=self.user)
         # get the results in json format
         result = json.loads(login_res.data.decode())
@@ -48,9 +48,9 @@ class AuthTestCase(unittest.TestCase):
 
     def test_user_with_wrong_credentials_cannot_login(self):
         """Test user with wrong credentials"""
-        res = self.client.post('/auth/register',data=self.user)
+        res = self.client.post('/api/v1/auth/register',data=self.user)
         user_data={'email':'zsh@gmail.com', 'password':'000000000'}
-        login_res = self.client.post('/auth/login',data=user_data)
+        login_res = self.client.post('/api/v1/auth/login',data=user_data)
         result = json.loads(login_res.data.decode())
         self.assertEqual(result['message'], "Invalid email or password, Please try again")
         # Assert that the status code is equal to 401
