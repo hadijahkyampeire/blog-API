@@ -1,0 +1,4 @@
+.vscode/
+blogsvenv/
+htmlcov/
+__pycache__/

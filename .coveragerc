@@ -1,0 +1,31 @@
+[report]=
+omit = 
+      *api/blogs/models*
+      */site-packages/*
+      *markupsafe/*
+      *psycopg2/*
+      *six.py*
+      *sqlalchemy/*
+      *werkzeug/*
+      *stringprep.py*
+      *uuid.py*
+      *ctypes/*
+      *decimal.py*
+      *encodings/*
+      *hmac.py*
+      *asyncio/*
+      *concurrent/*
+      *multiprocessing/*
+      *mimetypes.py*
+      *numbers.py*
+      *pydoc.py*
+      *http/*
+      *api/blogs/auth/__init__.py*
+      *api/blogs/args.py*
+      *api/blogs/blog/__init__.py*
+      *api/__init__.py*
+      *api/config.py*
+      *app/models.py*
+      *tests/*
+
+       

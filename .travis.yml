@@ -1,0 +1,24 @@
+language: python
+python:
+  - "3.5.2"
+
+services:
+  - postgresql
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls --quiet
+
+before_script:
+  - psql -c "CREATE ROLE blogs PASSWORD '0000' CREATEDB CREATEROLE INHERIT LOGIN;" -U postgres
+  - psql -c "create database blog_testdb;" -U postgres
+  # - python manage.py db init
+  # - python manage.py db migrate
+  # - python manage.py db upgrade
+
+# command to run tests
+script: 
+  - nosetests -v --with-coverage --cover-package=api
+# command for coverage reporting
+after_success: 
+  - coveralls
