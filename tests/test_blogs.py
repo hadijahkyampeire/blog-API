@@ -71,7 +71,7 @@ class blogsTestCase(unittest.TestCase):
         access_token = json.loads(result.data.decode())['access_token']
         result1 = self.client.post('/api/v1/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=self.blog)
         new_data = {'title':'dreams', 'blog':'to be a millionaire'}
-        result2 = self.client.post('/api/v1/blog/blogs',headers=dict(Authorization="Bearer " + access_token), data=new_data)
+        result2 = self.client.put('/api/v1/blog/blogs/1',headers=dict(Authorization="Bearer " + access_token), data=new_data)
         self.assertEqual(result2.status_code, 201)
 
     def test_blog_can_be_deleted(self):
@@ -145,6 +145,67 @@ class blogsTestCase(unittest.TestCase):
         result1 = self.client.post('/api/v1/blog/blogs', data=self.blog)
         result = self.client.delete('/api/v1/blog/blogs/1')
         self.assertEqual(result.status_code, 401)
+
+    def test_user_has_an_invalid_token_when_posting(self):
+        """Test for posting blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.post('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        self.assertEqual(result.status_code, 401)
+    
+    def test_user_has_an_invalid_token_when_getting(self):
+        """Test for getting blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.get('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        self.assertEqual(result.status_code, 401)
+
+    def test_user_has_an_invalid_token_when_getting_one(self):
+        """Test for getting one blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.post('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs/1', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        self.assertEqual(result.status_code, 401)
+
+    def test_user_has_an_invalid_token_when_getting_one(self):
+        """Test for getting one blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.post('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        result = self.client.get('/api/v1/blog/blogs/1', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        self.assertEqual(result.status_code, 401)
+
+    def test_user_has_an_invalid_token_when_deleting_one(self):
+        """Test for deleting one blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.post('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        result = self.client.delete('/api/v1/blog/blogs/1', 
+                headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(result.status_code, 401)
+
+    def test_user_has_an_invalid_token_when_putting_one(self):
+        """Test for putting one blog with invalid token"""
+        access_token="bchjkngs"
+        result = self.client.post('/api/v1/blog/blogs', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=self.blog)
+        new_blog={"title":"memories", "blog":"my own"}
+        result = self.client.put('/api/v1/blog/blogs/1', 
+                headers=dict(Authorization="Bearer " + access_token),
+                    data=new_blog)
+        self.assertEqual(result.status_code, 401)
+
     def tearDown(self):
         with app.app_context():
             # create all database tables

@@ -89,7 +89,7 @@ class blogDetailsView(Resource):
                 return make_response(jsonify({
                     'message':'blog successfully deleted'
                 }), 200)
-            return make_response(jsonify({'message': user_id}),401)
+            return make_response(jsonify({'message': user_id}), 401)
 
     @use_args(blogs_args, locations={'json', 'form'})
     def put(self, args, blog_id):
