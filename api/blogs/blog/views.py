@@ -33,9 +33,9 @@ class blogsListView(Resource):
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-                blogs = blogs.query.filter_by(created_by=user_id)
+                blogposts = blogs.query.filter_by(created_by=user_id)
                 items=[]
-                for blog in blogs:
+                for blog in blogposts:
                     blog_data={}
                     blog_data['id']=blog.id
                     blog_data['title']=blog.title
