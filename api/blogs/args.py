@@ -21,3 +21,12 @@ login_args ={
     'email':fields.Str(required=True, validate=validate.Email()),
     'password':fields.Str(required=True, validate=validate.Length(7))
 }
+email_args ={
+    'email':fields.Str(required=True, validate=validate.Email()),
+}
+reset_password ={
+    'username':fields.Str(required=True, validate=validate.Length(5)),
+    'email':fields.Str(required=True, validate=validate.Email()),
+    'password':fields.Str(required=True, validate=validate.Length(7)),
+    'retyped_password':fields.Str(required=True, validate=validate.Length(7))
+}
