@@ -1,8 +1,11 @@
 import unittest
 import json
-from api import app, db
+from api import create_app, db
 from api.config import app_config
 from api.blogs.models import User
+
+app = create_app()
+
 
 class AuthTestCase(unittest.TestCase):
     """This represents the authentication testcase"""
