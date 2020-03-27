@@ -1,8 +1,11 @@
 import unittest
 import json
-from api import app, db
+from api import create_app, db
 from api.config import app_config
 from api.blogs.models import blogs
+
+app = create_app()
+
 
 class blogsTestCase(unittest.TestCase):
     """This represents the blogs testcase"""

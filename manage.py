@@ -3,7 +3,9 @@ import os
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-from api import app, db 
+from api import create_app, db
+
+app = create_app()
 
 from api.config import app_config
 from api.blogs import models
